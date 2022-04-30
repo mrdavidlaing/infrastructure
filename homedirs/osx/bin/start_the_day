@@ -1,0 +1,131 @@
+#!/usr/bin/env bash
+
+set -e
+set -u
+
+# from https://stackoverflow.com/a/246128
+HOME_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" >/dev/null 2>&1 && pwd )"
+
+main() {
+  symlink_all_the_things
+#   set_clock_format
+#   set_dock_preferences
+  invoke_homebrew
+  invoke_softewareupdate
+  write_last_repave_date
+  commit_homedir_changes
+}
+
+
+#
+#   .config -> /Users/spring/workspace/infrastructure/homedirs/osx/bin/../dotfiles/dot.config
+# to
+#   .config -> /Users/spring/workspace/infrastructure/homedirs/osx/dotfiles/dot.config
+symlink_all_the_things() {
+  # Use the absolute path so that ls -la output doesn't include relative paths - eg: homedirs/osx/bin/../dotfiles/dot.config
+  local common_source=$(cd "${HOME_DIR}/../common"; pwd)
+  local dotfiles_dir="${HOME_DIR}/dotfiles"
+  local common_dotfiles_dir="${common_source}/dotfiles"
+
+  if [[ ! -d ~/.config ]]; then
+    mkdir ~/.config
+  fi
+
+#   if [[ ! -d ~/.gnupg ]]; then
+#     mkdir ~/.gnupg
+#     chmod 700 ~/.gnupg
+#   fi
+#   ln -sfv "${common_dotfiles_dir}/dot.gnupg/gpg-agent.conf" ~/.gnupg/gpg-agent.conf
+
+#   ln -sfv "${common_dotfiles_dir}/dot.githelpers" ~/.githelpers
+#   ln -sfv "${common_dotfiles_dir}/dot.tmux.conf" ~/.tmux.conf
+#   ln -sfv "${common_dotfiles_dir}/dot.gitconfig" ~/.gitconfig
+#   ln -sfv "${common_dotfiles_dir}/dot.mrconfig" ~/.mrconfig
+
+  # https://ss64.com/osx/ln.html the -h is important to not put a symlink in a dir symlink
+#   ln -shfv "${common_dotfiles_dir}/dot.config/alacritty" ~/.config/alacritty
+#   ln -shfv "${common_dotfiles_dir}/dot.config/nvim" ~/.config/nvim
+
+#   ln -sfv "${dotfiles_dir}/dot.zshrc" ~/.zshrc
+}
+
+write_last_repave_date() {
+  date > ~/.repavedate
+}
+
+invoke_homebrew() {
+  if [ ! -x /opt/homebrew/bin/brew ]
+  then
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  else
+    brew update || true
+  fi
+
+  brew bundle --file="${HOME_DIR}/Brewfile"
+}
+
+# Instruction manual:
+#   https://www.tech-otaku.com/mac/setting-the-date-and-time-format-for-the-macos-menu-bar-clock-using-terminal/
+set_clock_format() {
+  defaults write "com.apple.menuextra.clock" "DateFormat" -string "MMM d  HH:mm:ss"
+  killall SystemUIServer
+}
+
+set_dock_preferences() {
+  defaults write "com.apple.dock" "orientation" -string "left"
+  defaults write "com.apple.dock" "autohide" -bool "true"
+  # clears all the stuff I don't need or want
+  defaults write "com.apple.dock" "persistent-apps" -array
+  killall Dock
+}
+
+run_softwareupdate() {
+  local softwareupdate_indicator
+  softwareupdate_indicator="$1"
+  sudo softwareupdate -i -a && touch "${softwareupdate_indicator}"
+}
+
+last_softwareupdate_was_over_7_days_ago() {
+  local softwareupdate_indicator
+  softwareupdate_indicator="$1"
+  last_run=$(echo $(($(date +%s) - $(stat -t %s -f %m -- "${softwareupdate_indicator}"))))
+  last_run_days=$(( $last_run / (24 * 60 * 60) ))
+  echo Last software update was $last_run_days days ago
+  [ "${last_run_days}" -gt "7" ]
+}
+
+
+invoke_softewareupdate() {
+  local softwareupdate_indicator
+  softwareupdate_indicator=~/.softwareupdate_indicator
+
+  if [ ! -f "${softwareupdate_indicator}" ]
+  then
+    echo Indicator of previous softwareupdate execution does not appear to exist.
+    run_softwareupdate "${softwareupdate_indicator}"
+  else
+    if last_softwareupdate_was_over_7_days_ago "${softwareupdate_indicator}"
+    then
+      echo Going to run a softwareupdate since it has been a while
+      run_softwareupdate "${softwareupdate_indicator}"
+    else
+      echo Since softwareupdate ran recently, not going to do anything
+      echo remove ${softwareupdate_indicator} to force an update
+    fi
+  fi
+}
+
+commit_homedir_changes() {
+  pushd "${HOME_DIR}"
+    if [[ `git status --porcelain` ]]; then
+      echo "Adding & pushing homedir changes upstream"
+      git add -p
+      git commit
+      git push
+    else
+      echo "No homedir changes detected.  Skipping git update"
+    fi
+  popd
+}
+
+main

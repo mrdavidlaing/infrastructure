@@ -1,0 +1,2 @@
+# PyEnv makes managing different Python versions a breeze
+brew 'pyenv'
