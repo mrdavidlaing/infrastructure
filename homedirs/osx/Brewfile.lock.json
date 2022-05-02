@@ -39,15 +39,24 @@
             }
           }
         }
+      },
+      "powerlevel10k": {
+        "version": "1.16.1",
+        "bottle": false
+      }
+    },
+    "tap": {
+      "romkatv/powerlevel10k": {
+        "revision": "4c915e3b3df520eea149c1fbde6a427d99b52c34"
       }
     }
   },
   "system": {
     "macos": {
       "monterey": {
-        "HOMEBREW_VERSION": "3.4.9",
+        "HOMEBREW_VERSION": "3.4.10",
         "HOMEBREW_PREFIX": "/opt/homebrew",
-        "Homebrew/homebrew-core": "97bee3aacb4fec99972204a4b13bb5ed43cb0064",
+        "Homebrew/homebrew-core": "08e55394b8132a12b5cbf6cfb339f754aeca164b",
         "CLT": "13.3.1.0.1.1648687083",
         "Xcode": "13.3",
         "macOS": "12.3.1"

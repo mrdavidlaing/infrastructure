@@ -8,6 +8,8 @@ HOME_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" >/dev/null 2>&1 && pwd )"
 
 main() {
   symlink_all_the_things
+  install_fonts
+  configure_terminal
 #   set_clock_format
 #   set_dock_preferences
   invoke_homebrew
@@ -16,16 +18,27 @@ main() {
   commit_homedir_changes
 }
 
+install_fonts() {
+  # Install the modified Meslo Nerd Font used by https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k
+  local font_path="${HOME}/Library/Fonts"
+  local meslo_nf_path="${font_path}/MesloLGS NF Regular.ttf"
+  echo "====> Installing modified Meslo Nerd Fonts to ~/Library/Fonts/ from https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k"
+  if [ -f "${meslo_nf_path}" ]; then
+    echo "  Skipping because they are already installed." 
+  else
+    curl -L -o "${font_path}/MesloLGS NF Regular.ttf"     https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
+    curl -L -o "${font_path}/MesloLGS NF Bold.ttf"        https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf
+    curl -L -o "${font_path}/MesloLGS NF Italic.ttf"      https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
+    curl -L -o "${font_path}/MesloLGS NF Bold Italic.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
+  fi
+  echo "Done!"
+}
 
-#
-#   .config -> /Users/spring/workspace/infrastructure/homedirs/osx/bin/../dotfiles/dot.config
-# to
-#   .config -> /Users/spring/workspace/infrastructure/homedirs/osx/dotfiles/dot.config
 symlink_all_the_things() {
-  # Use the absolute path so that ls -la output doesn't include relative paths - eg: homedirs/osx/bin/../dotfiles/dot.config
+  # Use the absolute path so that ls -la output doesn't include relative paths - eg: homedirs/osx/bin/../config/dot.config
   local common_source=$(cd "${HOME_DIR}/../common"; pwd)
-  local dotfiles_dir="${HOME_DIR}/dotfiles"
-  local common_dotfiles_dir="${common_source}/dotfiles"
+  local config_dir="${HOME_DIR}/config"
+  local common_config_dir="${common_source}/common/config"
 
   if [[ ! -d ~/.config ]]; then
     mkdir ~/.config
@@ -40,15 +53,32 @@ symlink_all_the_things() {
 #   ln -sfv "${common_dotfiles_dir}/dot.githelpers" ~/.githelpers
 #   ln -sfv "${common_dotfiles_dir}/dot.tmux.conf" ~/.tmux.conf
 #   ln -sfv "${common_dotfiles_dir}/dot.gitconfig" ~/.gitconfig
-#   ln -sfv "${common_dotfiles_dir}/dot.mrconfig" ~/.mrconfig
+#   ln -sfv "${common_dotfiles_dir}/dot.mrconfig" ~/.mrconfig 
 
   # https://ss64.com/osx/ln.html the -h is important to not put a symlink in a dir symlink
 #   ln -shfv "${common_dotfiles_dir}/dot.config/alacritty" ~/.config/alacritty
 #   ln -shfv "${common_dotfiles_dir}/dot.config/nvim" ~/.config/nvim
 
-#   ln -sfv "${dotfiles_dir}/dot.zshrc" ~/.zshrc
+  ln -sfv "${config_dir}/dot.zshrc" ~/.zshrc
+  ln -sfv "${config_dir}/dot.p10k.zsh" ~/.p10k.zsh
 }
 
+configure_terminal() {
+  local config_dir="${HOME_DIR}/config"
+
+  # Convert the XML config that we commit to the binary format needed by Mac Terminal app
+  cp "${config_dir}/com.apple.Terminal.plist.xml" "${config_dir}/com.apple.Terminal.plist"
+  plutil -convert binary1 "${config_dir}/com.apple.Terminal.plist"
+
+  # Symlink our settings over the system settings
+  ln -sfv "${config_dir}/com.apple.Terminal.plist" ~/Library/Preferences/com.apple.Terminal.plist
+
+  # To commit changed settings settings
+  # $ cp com.apple.Terminal.plist com.apple.Terminal.plist.xml
+  # $ plutil -convert xml1 com.apple.Terminal.plist.xml
+  # commit changes
+}
+  
 write_last_repave_date() {
   date > ~/.repavedate
 }
