@@ -49,6 +49,14 @@
       "romkatv/powerlevel10k": {
         "revision": "4c915e3b3df520eea149c1fbde6a427d99b52c34"
       }
+    },
+    "cask": {
+      "spotify": {
+        "version": "1.1.84.716,c5f8b819,8",
+        "options": {
+          "full_name": "spotify"
+        }
+      }
     }
   },
   "system": {
@@ -56,7 +64,7 @@
       "monterey": {
         "HOMEBREW_VERSION": "3.4.10",
         "HOMEBREW_PREFIX": "/opt/homebrew",
-        "Homebrew/homebrew-core": "08e55394b8132a12b5cbf6cfb339f754aeca164b",
+        "Homebrew/homebrew-core": "0279244483cc0efc4f069a343cdaec0eb7e94622",
         "CLT": "13.3.1.0.1.1648687083",
         "Xcode": "13.3",
         "macOS": "12.3.1"
