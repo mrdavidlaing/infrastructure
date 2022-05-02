@@ -62,6 +62,22 @@ symlink_all_the_things() {
   ln -sfv "${config_dir}/dot.p10k.zsh" ~/.p10k.zsh
 }
 
+configure_terminal() {
+  local config_dir="${HOME_DIR}/config"
+
+  # Convert the XML config that we commit to the binary format needed by Mac Terminal app
+  cp "${config_dir}/com.apple.Terminal.plist.xml" "${config_dir}/com.apple.Terminal.plist"
+  plutil -convert binary1 "${config_dir}/com.apple.Terminal.plist"
+
+  # Symlink our settings over the system settings
+  ln -sfv "${config_dir}/com.apple.Terminal.plist" ~/Library/Preferences/com.apple.Terminal.plist
+
+  # To commit changed settings settings
+  # $ cp com.apple.Terminal.plist com.apple.Terminal.plist.xml
+  # $ plutil -convert xml1 com.apple.Terminal.plist.xml
+  # commit changes
+}
+  
 write_last_repave_date() {
   date > ~/.repavedate
 }
