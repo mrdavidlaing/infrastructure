@@ -56,6 +56,12 @@
         "options": {
           "full_name": "spotify"
         }
+      },
+      "obsidian": {
+        "version": "0.14.6",
+        "options": {
+          "full_name": "obsidian"
+        }
       }
     }
   },

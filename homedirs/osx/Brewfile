@@ -7,3 +7,6 @@ brew 'powerlevel10k'
 
 # Tunes!
 cask 'spotify'
+
+# Markdown notes
+cask 'obsidian'
