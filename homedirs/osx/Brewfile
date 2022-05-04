@@ -10,3 +10,6 @@ cask 'spotify'
 
 # Markdown notes
 cask 'obsidian'
+
+# Shows the next meeting in the menu bar
+cask "meetingbar"
