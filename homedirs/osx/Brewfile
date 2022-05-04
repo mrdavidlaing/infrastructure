@@ -13,3 +13,6 @@ cask 'obsidian'
 
 # Shows the next meeting in the menu bar
 cask "meetingbar"
+
+# Your personal MacOS butler (mainly for the clipboard history feature)
+cask "alfred"

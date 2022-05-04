@@ -68,6 +68,12 @@
         "options": {
           "full_name": "meetingbar"
         }
+      },
+      "alfred": {
+        "version": "4.6.5,1299",
+        "options": {
+          "full_name": "alfred"
+        }
       }
     }
   },
