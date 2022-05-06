@@ -1,5 +1,6 @@
 # PyEnv makes managing different Python versions a breeze
 brew 'pyenv'
+brew 'pyenv-virtualenv'
 
 # Fancy zsh prompt thanks to https://github.com/romkatv/powerlevel10k
 tap 'romkatv/powerlevel10k'
