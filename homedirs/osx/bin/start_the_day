@@ -38,7 +38,7 @@ symlink_all_the_things() {
   # Use the absolute path so that ls -la output doesn't include relative paths - eg: homedirs/osx/bin/../config/dot.config
   local common_source=$(cd "${HOME_DIR}/../common"; pwd)
   local config_dir="${HOME_DIR}/config"
-  local common_config_dir="${common_source}/common/config"
+  local common_config_dir="${common_source}/config"
 
   if [[ ! -d ~/.config ]]; then
     mkdir ~/.config
