@@ -61,6 +61,7 @@ symlink_all_the_things() {
 #   ln -shfv "${common_dotfiles_dir}/dot.config/alacritty" ~/.config/alacritty
 #   ln -shfv "${common_dotfiles_dir}/dot.config/nvim" ~/.config/nvim
 
+  ln -sfv "${config_dir}/dot.zprofile" ~/.zprofile
   ln -sfv "${config_dir}/dot.zshrc" ~/.zshrc
   ln -sfv "${config_dir}/dot.p10k.zsh" ~/.p10k.zsh
 }
