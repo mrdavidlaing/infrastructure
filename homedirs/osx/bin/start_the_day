@@ -50,9 +50,11 @@ symlink_all_the_things() {
 #   fi
 #   ln -sfv "${common_dotfiles_dir}/dot.gnupg/gpg-agent.conf" ~/.gnupg/gpg-agent.conf
 
+    ln -sfv "${common_config_dir}/dot.gitconfig" ~/.gitconfig
+
+
 #   ln -sfv "${common_dotfiles_dir}/dot.githelpers" ~/.githelpers
 #   ln -sfv "${common_dotfiles_dir}/dot.tmux.conf" ~/.tmux.conf
-#   ln -sfv "${common_dotfiles_dir}/dot.gitconfig" ~/.gitconfig
 #   ln -sfv "${common_dotfiles_dir}/dot.mrconfig" ~/.mrconfig 
 
   # https://ss64.com/osx/ln.html the -h is important to not put a symlink in a dir symlink

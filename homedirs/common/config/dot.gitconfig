@@ -1,0 +1,12 @@
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[user]
+	name = David Laing
+	email = david.laing@shopify.com
+[include]
+	path = /Users/mrdavidlaing/.config/dev/gitconfig
+[core]
+	editor = code -w
