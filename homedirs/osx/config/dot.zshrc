@@ -12,13 +12,20 @@ source /opt/homebrew/opt/powerlevel10k/powerlevel10k.zsh-theme
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# Set shell environment for Pyenv
+# Set shell environment for pyenv & pyenv-virtualenv
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/shims:$PATH"
 eval "$(pyenv init -)"
+if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
-[[ -f /opt/dev/sh/chruby/chruby.sh ]] && type chruby >/dev/null 2>&1 || chruby () { source /opt/dev/sh/chruby/chruby.sh; chruby "$@"; }
+# Add Visual Studio Code (code) to the path
+export PATH="\$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
+# Setup Homebrew
 [[ -x /opt/homebrew/bin/brew ]] && eval $(/opt/homebrew/bin/brew shellenv)
 
+# Setup Ruby
+[[ -f /opt/dev/sh/chruby/chruby.sh ]] && type chruby >/dev/null 2>&1 || chruby () { source /opt/dev/sh/chruby/chruby.sh; chruby "$@"; }
+
+# Setup Shopify Dev
 [ -f /opt/dev/dev.sh ] && source /opt/dev/dev.sh
