@@ -18,5 +18,5 @@ cask "meetingbar"
 # Your personal MacOS butler (mainly for the clipboard history feature)
 cask "alfred"
 
-# Google Cloud SKD
+# Google Cloud SDK
 cask 'google-cloud-sdk'

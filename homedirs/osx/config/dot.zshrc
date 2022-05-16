@@ -26,3 +26,10 @@ export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/b
 
 # Setup Shopify Dev
 [ -f /opt/dev/dev.sh ] && source /opt/dev/dev.sh
+[[ -x /opt/homebrew/bin/brew ]] && eval $(/opt/homebrew/bin/brew shellenv)
+
+# Setup google-cloud-sdk
+source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
+source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
+# Ensure google-cloud-sdk uses the system python
+export CLOUDSDK_PYTHON="/opt/homebrew/bin/python3"
