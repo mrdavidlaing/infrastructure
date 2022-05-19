@@ -20,3 +20,8 @@ cask "alfred"
 
 # Google Cloud SDK
 cask 'google-cloud-sdk'
+
+# Helpful command line tools
+brew 'tree'
+brew 'watch'
+brew 'bat'
